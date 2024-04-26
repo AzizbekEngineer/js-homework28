@@ -1,5 +1,5 @@
-.hero {
-    padding: 80px 0;
+.cardsPage {
+    padding: 20px 0;
 }
 
 .line {
@@ -84,9 +84,16 @@
 }
 
 .card__price {
+    padding-top: 15px;
     font-size: 18px;
     color: #46A358;
     font-weight: bold;
+}
+
+.card__price__old {
+    text-decoration: line-through;
+    color: red;
+    padding-left: 10px;
 }
 
 .moreBtn {
@@ -122,6 +129,15 @@
 .select__wrapper {
     display: flex;
     justify-content: flex-end;
+}
+
+select,
+option {
+    padding: 8px 16px;
+    font-size: 18px;
+    border: 1px solid #46A358;
+    background: white;
+    border-radius: 5px;
 }
 
 @media(max-width:1100px) {

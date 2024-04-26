@@ -8,7 +8,7 @@ const back = document.querySelector('.back')
 const modalClose = document.querySelector('.modal__close')
 
 
-const API_URL = 'https://fakestoreapi.com'
+const API_URL = 'https://dummyjson.com'
 
 
 let limitCount = 8
@@ -20,7 +20,7 @@ async function fetchData(URL) {
     console.log(data);
     data
         .json()
-        .then(res => createCard(res))
+        .then(res => createCardProduct(res))
         .catch(err => console.log(err))
         .finally(() => {
             loading.style.display = 'none'
@@ -31,13 +31,14 @@ async function fetchData(URL) {
 fetchData(API_URL)
 
 
-function createCard(data) {
+function createCardProduct(data) {
+    console.log(data);
     let cards = ''
-    data.forEach(product => {
+    data.products.forEach(product => {
         cards += `
                 <div class="card">
                     <div class="card__img">
-                        <img src="${product.image}" alt="">
+                        <img src="${product.images[0]}" alt="">
                     </div>
                     <div class="card__icons">
                         <div class="card__icons__img">
@@ -51,14 +52,13 @@ function createCard(data) {
                         </div>
                     </div>
                     <h3 class="card__title">${product.title}</h3>
-                    <p class="card__price">${product.price}</p>
-                    <button class="btn" data-id = "${product.id}" >Kop</button>
+                    <p class="card__price">Price: ${product.price}$  <span class="card__price__old"> ${product.price * 2}$</span></p>
+                    <button class="btn" data-id = "${product.id}" >More Info</button>
                 </div>
         `
     });
     wrapper.innerHTML = cards
 }
-
 
 function createLoad(count) {
     let loadingCards = ''
@@ -137,3 +137,73 @@ async function signIn(user) {
         })
         .catch(err => console.log('err>>', err))
 }
+
+/* Select and search */
+let cotigories = document.querySelector('#cotigories')
+let select = document.querySelector('.select')
+const inputSearch = document.querySelector('.serach__value')
+
+async function fetchCotigoris(URL) {
+    let data = await fetch(`${URL}/products/categories`)
+    data
+        .json()
+        .then(res => createSelect(res))
+        .catch(err => console.log(err))
+}
+fetchCotigoris(API_URL)
+
+function createSelect(data) {
+    let selects = `
+        <option value="all">all</option>
+    `
+    data.forEach(option => {
+        selects += `
+        <option value="${option}">${option}</option>
+       `
+    })
+    select.innerHTML = selects
+}
+
+
+async function fetchProducts(URL, option, searchValue) {
+    let url = ''
+    if (option === 'all') {
+        if (searchValue) {
+            url = `${URL}/products/search/?q=${searchValue}`
+        } else {
+            url = `${URL}/products`
+        }
+    } else {
+        url = `${URL}/products/category/${option}?limit=8`
+    }
+    console.log(url);
+    const data = await fetch(url, {
+        method: "GET"
+    })
+
+    data
+        .json()
+        .then(res => createCardProduct(res))
+        .catch(err => console.log(err))
+        .finally(() => {
+
+        })
+}
+
+fetchProducts(API_URL, 'all')
+select.addEventListener('change', (e) => {
+    let product = e.target.value
+    fetchProducts(API_URL, product)
+})
+inputSearch.addEventListener('input', (e) => {
+    console.log(e.target.value);
+    let value = e.target.value.trim()
+    if (value) {
+        fetchProducts(API_URL, 'all', value)
+        select.value = 'all'
+    }
+})
+
+
+
+

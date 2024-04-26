@@ -48,7 +48,7 @@
         border: none;
     }
 
-    .searc__value {
+    .serach__value {
         border: 0.1px solid rgba(0, 0, 0, 0.178);
         max-width: 150px;
         padding: 8px 16px;
@@ -107,7 +107,7 @@
     }
 }
 
-@media (max-width:730px) {
+@media (max-width:900px) {
     .header {
         &__list {
             position: fixed;
@@ -148,7 +148,7 @@
     }
 }
 
-@media (max-width:480px) {
+@media (max-width:600px) {
     .header {
         &__navbar {
             display: flex;
